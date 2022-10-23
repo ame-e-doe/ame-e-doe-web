@@ -1,20 +1,42 @@
+import { FormEvent, useContext, useState } from 'react';
 import './App.css';
-import { useGetAllCategorys } from './hooks/use-category';
+import { AuthContext } from '../src/contexts/auth-context';
 
 function App() {
-  const { categorys } = useGetAllCategorys();
+  const { signIn } = useContext(AuthContext);
+
+  const [email, setEmail] = useState('');
+  const [password, setpassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  async function handleLogin(event: FormEvent) {
+    event.preventDefault();
+    const credentials = {
+      email,
+      password,
+    };
+
+    await signIn(credentials);
+  }
 
   return (
     <div className='App'>
-      <ul>
-        {categorys?.map((categoria) => {
-          return (
-            <li key={categoria.id}>
-              <p>{categoria.description}</p>
-            </li>
-          );
-        })}
-      </ul>
+      <h1>Teste do rennan</h1>
+      <form onSubmit={handleLogin}>
+        <input
+          placeholder='email'
+          type='text'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          placeholder='senha'
+          type='password'
+          value={password}
+          onChange={(e) => setpassword(e.target.value)}
+        />
+        <button type='submit'> aperta aí </button>
+      </form>
     </div>
   );
 }
